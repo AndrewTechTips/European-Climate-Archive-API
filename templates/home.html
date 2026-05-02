@@ -2,14 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Data API</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
 </head>
+
 <body>
-<h1>Weather Data API</h1>
-<p>URL format: http://127.0.0.1:5000/api/v1/station/date</p>
-<p>For one station for one date: http://127.0.0.1:5000/api/v1/10/1988-10-25</p>
-<p>For one station for all dates: http://127.0.0.1:5000/api/v1/10</p>
-<p>For one station for one year: http://127.0.0.1:5000/api/v1/yearly/10/1988</p>
-<p>{{data|safe}}</p>
+    <header>
+        <h1>🌤️ Weather Data API</h1>
+        <p>A simple and fast interface for accessing historical temperature data.</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>How to use (Endpoints)</h2>
+            <ul>
+                <li><strong>Specific date:</strong> <code>/api/v1/[station_id]/[date]</code></li>
+                <li><strong>All data:</strong> <code>/api/v1/[station_id]</code></li>
+                <li><strong>Yearly data:</strong> <code>/api/v1/yearly/[station_id]/[year]</code></li>
+            </ul>
+            <p><em>Example:</em> <a href="/api/v1/10/1988-10-25" target="_blank">/api/v1/10/1988-10-25</a></p>
+        </section>
+
+        <section>
+            <h2>Available Stations</h2>
+            <div style="overflow-x:auto;">
+                {{data|safe}}
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <hr>
+        <p><small>Project created for GitHub portfolio | Data provided by weather station network.</small></p>
+    </footer>
 </body>
 </html>
