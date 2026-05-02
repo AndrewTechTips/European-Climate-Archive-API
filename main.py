@@ -1,23 +1,32 @@
 from flask import Flask, render_template, jsonify
 import pandas as pd
 
+from utils import get_station_data
+
 app = Flask(__name__)
 
 stations = pd.read_csv("data-small/stations.txt", skiprows=17)
-stations = stations[["STAID", "STANAME                                 "]]
+stations.columns = [col.strip() for col in stations.columns]
+stations = stations[["STAID", "STANAME"]]
 
 
 @app.route("/")
 def home():
-    return render_template("home.html", data=stations.to_html())
+    return render_template("home.html", data=stations.to_html(index=False))
 
 
 @app.route("/api/v1/<station>/<date>")
 def about(station, date):
-    filename = "data-small/TG_STAID" + str(station).zfill(6) + ".txt"
-    df = pd.read_csv(filename, skiprows=20, parse_dates=["    DATE"])
-    temperature = df.loc[df["    DATE"] == date]["   TG"].squeeze() / 10
+    df = get_station_data(station)
+    if df is None:
+        return jsonify({"error": "Station not found"}), 404
 
+    station_data = df.loc[df["DATE"] == date]
+
+    if station_data.empty:
+        return jsonify({"error": "Date not found for this station"}), 404
+
+    temperature = station_data["TG"].squeeze() / 10
     return {"station": station, "date": date, "temperature": temperature}
 
 
