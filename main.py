@@ -32,10 +32,11 @@ def about(station, date):
 
 @app.route("/api/v1/<station>")
 def all_data(station):
-    filename = "data-small/TG_STAID" + str(station).zfill(6) + ".txt"
-    df = pd.read_csv(filename, skiprows=20, parse_dates=["    DATE"])
-    result = df.to_dict(orient="records")
-    return result
+    df = get_station_data(station)
+    if df is None:
+        return jsonify({"error": "Station not found"}), 404
+
+    return df.to_dict(orient="records")
 
 
 @app.route("/api/v1/yearly/<station>/<year>")
